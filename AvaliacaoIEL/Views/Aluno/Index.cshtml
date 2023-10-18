@@ -1,0 +1,92 @@
+﻿@model List<AlunoModel>
+@{
+    ViewData["Title"] = "Lista de Estudantes";
+
+
+}
+
+<div class="text-center">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a role="button" class="btn btn-primary" asp-controller="Aluno" asp-action="Criar">Adicionar</a>
+    </div>
+    <br />
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">x</button>
+            @TempData["MensagemSucesso"]
+    </div>
+    }
+
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" arial-label="Close">x</button>
+            @TempData["MensagemErro"]
+        </div>
+    }
+    <br />
+    <h1>Listagem de Estudantes</h1>
+    <form id="form" asp-controller="Aluno" asp-action="Excluir" method="post">
+    <table class="table table-striped" id="TableAlunos">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">CPF</th>
+                <th scope="col">Endereco</th>
+                <th scope="col">Curso</th>
+                <th scope="col">DataConclusao</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model != null && Model.Any())
+            {
+                foreach(AlunoModel aluno in Model)
+                {
+                    <tr>
+                        <th scope="row">@aluno.Id</th>
+                        <td>@aluno.Nome</td>
+                        <td>@aluno.CPF</td>
+                        <td>@aluno.Endereco</td>
+                        <td>@aluno.NomeCurso</td>
+                        <td>@aluno.DataConclusao</td>
+                        <td>
+                            <div class="btn-group" role="group">
+
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@aluno.Id">
+                                        Excluir
+                                    </button>
+                            </div>
+
+                            <!-- Button trigger modal -->
+                                
+
+                            <!-- Modal -->
+                                <div class="modal fade" id="deleteModal-@aluno.Id" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="deleteModalLabel">Excluir Aluno</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Deseja realmente excluir o aluno @aluno.Nome?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                                                <a role="button" asp-action="Delete" asp-route-id="@aluno.Id" class="btn btn-danger">Sim</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+    </form>
+</div>
